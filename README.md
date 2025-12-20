@@ -21,6 +21,7 @@ Install packages:
 sudo pacman -S python-requests
 sudo pacman -S python-beautifulsoup4
 sudo pacman -S python-py7zr
+sudo pacman -S python-argparse
 ```
 
 ### Once the libraries are successfully installed, you can run the python script in Konsole.
