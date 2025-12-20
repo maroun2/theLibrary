@@ -9,34 +9,18 @@ You must have Emulation Station installed first. You can find guides on Youtube 
 ```
 python -V
 ```
-5. Install PIP:
+
+Install packages: 
+
+1. execute "sudo steamos-readonly disable"
+
+2. remove the pgp check in /etc/pacman.conf with this guide: https://www.archlinuxuser.com/2012/06/ignore-signature-check-when-doing.html?m=1
+
+3. Install packages: 
 ```
-sudo pacman-key --init
-sudo pacman-key --populate archlinux
-wget https://bootstrap.pypa.io/get-pip.py
-python get-pip.py
-```
-6. Add PIP to PATH:
-```
-nano ~/.bashrc
-```
-&emsp;&emsp;Add at the end of the script
-```
-PATH="$HOME/.local/bin:$PATH"
-```
-&emsp;&emsp;CTRL+X then Y then ENTER (Exiting the .bashrc script)
-```
-source ~/.bashrc
-```
-8. Confirm that PIP is correctly added to PATH:
-```
-pip -V
-```
-9. Install python libraries:
-```
-pip install requests
-pip install beautifulsoup4
-pip install py7zr
+sudo pacman -S python-requests
+sudo pacman -S python-beautifulsoup4
+sudo pacman -S python-py7zr
 ```
 
 ### Once the libraries are successfully installed, you can run the python script in Konsole.
