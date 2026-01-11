@@ -1,35 +1,68 @@
-# The Library for EmuDeck Emulation Station
+# The Library for EmuDeck / ES-DE
 
-You must have Emulation Station installed first. You can find guides on Youtube and Google on how to install EmuDeck.
+Browse and download ROMs directly from your Steam Deck's Emulation Station interface.
 
-### Prerequisites before running the python script:
-1. Go to Desktop mode
-2. Open Konsole
-3. Check that Python is installed:
+## Installation (Steam Deck)
+
+1. Open Desktop mode and Konsole
+
+2. Clone the repository:
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/theLibrary.git ~/theLibrary
+   cd ~/theLibrary
+   ```
+
+3. Run the install script:
+   ```bash
+   chmod +x install.sh
+   ./install.sh
+   ```
+
+4. Run the library generator:
+   ```bash
+   ~/theLibrary/venv/bin/python3 theLibrary.py
+   ```
+
+## Testing
+
+Test the connection and parsing before generating the full library:
+```bash
+~/theLibrary/venv/bin/python3 theLibrary.py --test
 ```
-python -V
+
+## Usage
+
+After running the script:
+1. Open ES-DE (Emulation Station)
+2. You'll see "The Library" in the main menu
+3. Browse consoles and select a game
+4. The game will download automatically and be ready to play
+
+## Supported Consoles
+
+- SNES (Super Nintendo)
+- NES (Nintendo Entertainment System)
+- N64 (Nintendo 64)
+- Game Boy / Game Boy Color / Game Boy Advance
+- Sega Genesis / Master System / Game Gear
+- PlayStation / PS2 / PSP
+
+## Troubleshooting
+
+**"Module not found" errors:**
+Make sure you ran `./install.sh` and are using the venv Python:
+```bash
+~/theLibrary/venv/bin/python3 theLibrary.py
 ```
 
-Install packages: 
-
-1. execute "sudo steamos-readonly disable"
-
-2. remove the pgp check in /etc/pacman.conf with this guide: https://www.archlinuxuser.com/2012/06/ignore-signature-check-when-doing.html?m=1
-
-3. Install packages: 
-```
-sudo pacman -S python-requests
-sudo pacman -S python-beautifulsoup4
-sudo pacman -S python-py7zr
-sudo pacman -S python-argparse
-sudo pacman -S python-zipfile
+**Downloads not working:**
+Test the connection first:
+```bash
+~/theLibrary/venv/bin/python3 theLibrary.py --test
 ```
 
-### Once the libraries are successfully installed, you can run the python script in Konsole.
+**Regenerate library after updates:**
+Simply run the script again to update the game list:
+```bash
+~/theLibrary/venv/bin/python3 theLibrary.py
 ```
-/usr/bin/python3 path/to/script.py
-```
-
-After running the script, open Steam in Desktop mode or go back to Game mode, then run Emulation Station. You will now see "The Library" in the main menu.<br />
-<br />
-NOTE: Make sure to change the "XXXXXX" with the correct URLs and strings in the python script. Running the script as is will not succeed. Due to legal concerns, I chose not to share the URLs I used to download roms. It's fairly easy to find the URLs on Google. Just make sure it's safe.

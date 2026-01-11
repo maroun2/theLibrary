@@ -109,7 +109,8 @@ def generate_launcher_script(console_name, title):
     url = CONSOLES.get(console_name, '')
     file_path = f"~/Emulation/roms/{console_name}"
 
-    return f'''import os
+    return f'''#!/home/deck/theLibrary/venv/bin/python3
+import os
 import requests
 from bs4 import BeautifulSoup
 import zipfile
@@ -207,7 +208,7 @@ def addLibrary():
     <fullname>The Library</fullname>
     <path>~/Emulation/roms/thelibrary</path>
     <extension>.py</extension>
-    <command>/usr/bin/python3 %ROM%</command>
+    <command>/home/deck/theLibrary/venv/bin/python3 %ROM%</command>
     <theme>library</theme>
   </system>
 """
