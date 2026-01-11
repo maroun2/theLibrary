@@ -111,54 +111,84 @@ def generate_launcher_script(console_name, title):
 
     return f'''#!/home/deck/theLibrary/venv/bin/python3
 import os
+import sys
 import requests
 from bs4 import BeautifulSoup
 import zipfile
 import py7zr
 
+# Log to file for debugging
+log_file = os.path.expanduser('~/theLibrary/launcher.log')
+def log(msg):
+    with open(log_file, 'a') as f:
+        f.write(msg + '\\n')
+    print(msg)
+
+log(f"=== Starting download: {{os.path.basename(__file__)}} ===")
+log(f"Python: {{sys.executable}}")
+log(f"Working dir: {{os.getcwd()}}")
+
 url = '{url}'
 file_path = os.path.expanduser('{file_path}')
 
-response = requests.get(url)
+log(f"URL: {{url}}")
+log(f"Destination: {{file_path}}")
 
-if response.status_code == 200:
-    soup = BeautifulSoup(response.content, 'html.parser')
-    links = soup.find_all('a', href=True)
+# Ensure destination exists
+os.makedirs(file_path, exist_ok=True)
 
-    zip_links = []
-    for link in links:
-        if link['href'].endswith('.zip') or link['href'].endswith('.7z'):
-            zip_links.append(link)
+try:
+    response = requests.get(url)
+    log(f"Response status: {{response.status_code}}")
 
-    for link in zip_links:
-        if link.text.endswith('.zip'):
-            link_text = link.text.rstrip('.zip')
-        elif link.text.endswith('.7z'):
-            link_text = link.text.rstrip('.7z')
+    if response.status_code == 200:
+        soup = BeautifulSoup(response.content, 'html.parser')
+        links = soup.find_all('a', href=True)
 
-        if link_text in str(os.path.basename(__file__)).rstrip('.py'):
-            full_url = url + '/' + link['href']
-            download_response = requests.get(full_url)
-            if download_response.status_code == 200:
-                with open(file_path + '/' + link.text, 'wb') as f:
-                    f.write(download_response.content)
-                print("Download successful.")
+        zip_links = []
+        for link in links:
+            if link['href'].endswith('.zip') or link['href'].endswith('.7z'):
+                zip_links.append(link)
 
-                downloaded_file = file_path + '/' + link.text
-                if downloaded_file.endswith('.zip'):
-                    with zipfile.ZipFile(downloaded_file, 'r') as f:
-                        f.extractall(file_path)
-                    os.remove(downloaded_file)
-                elif downloaded_file.endswith('.7z'):
-                    with py7zr.SevenZipFile(downloaded_file, mode='r') as f:
-                        f.extractall(path=file_path)
-                    os.remove(downloaded_file)
-                break
-            else:
-                print("Failed to download.")
-                break
-else:
-    print("Game not found in HTML.")
+        log(f"Found {{len(zip_links)}} archive links")
+
+        for link in zip_links:
+            if link.text.endswith('.zip'):
+                link_text = link.text.rstrip('.zip')
+            elif link.text.endswith('.7z'):
+                link_text = link.text.rstrip('.7z')
+
+            if link_text in str(os.path.basename(__file__)).rstrip('.py'):
+                full_url = url + link['href']
+                log(f"Downloading: {{full_url}}")
+                download_response = requests.get(full_url)
+                log(f"Download status: {{download_response.status_code}}")
+                if download_response.status_code == 200:
+                    with open(file_path + '/' + link.text, 'wb') as f:
+                        f.write(download_response.content)
+                    log("Download successful.")
+
+                    downloaded_file = file_path + '/' + link.text
+                    if downloaded_file.endswith('.zip'):
+                        with zipfile.ZipFile(downloaded_file, 'r') as f:
+                            f.extractall(file_path)
+                        os.remove(downloaded_file)
+                        log("Extracted zip.")
+                    elif downloaded_file.endswith('.7z'):
+                        with py7zr.SevenZipFile(downloaded_file, mode='r') as f:
+                            f.extractall(path=file_path)
+                        os.remove(downloaded_file)
+                        log("Extracted 7z.")
+                    break
+                else:
+                    log(f"Failed to download: {{download_response.status_code}}")
+                    break
+    else:
+        log(f"Failed to fetch URL: {{response.status_code}}")
+except Exception as e:
+    log(f"ERROR: {{e}}")
+
+log("=== Done ===\\n")
 '''
 
 
