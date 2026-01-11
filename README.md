@@ -66,3 +66,16 @@ Simply run the script again to update the game list:
 ```bash
 ~/theLibrary/venv/bin/python3 theLibrary.py
 ```
+
+## Uninstall
+
+To completely remove The Library:
+```bash
+# Remove launcher files
+rm -rf ~/Emulation/roms/thelibrary
+
+# Remove the project and venv
+rm -rf ~/theLibrary
+```
+
+Then manually remove the Library entry from `~/ES-DE/custom_systems/es_systems.xml` (delete the `<system>` block with `<name>Library</name>`).
