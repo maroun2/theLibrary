@@ -11,5 +11,8 @@ echo "Installing dependencies..."
 "$VENV_PATH/bin/pip" install requests beautifulsoup4 py7zr
 
 echo ""
-echo "Installation complete!"
-echo "Run: ~/theLibrary/venv/bin/python3 theLibrary.py"
+echo "Installation complete! Running theLibrary to complete setup..."
+echo ""
+
+cd "$(dirname "$0")"
+"$VENV_PATH/bin/python3" theLibrary.py
